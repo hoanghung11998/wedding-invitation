@@ -5,42 +5,57 @@ export const Cover = ({ isStarted, setIsStarted }) => {
   
   useEffect(() => {
   if (isStarted) {
+    // Tăng thời gian chờ để khớp với hiệu ứng mờ ảnh (2.5s)
+    // và đảm bảo React đã đưa "couple-section" vào DOM
     const timer = setTimeout(() => {
       const nextSection = document.getElementById("couple-section");
+      
       if (nextSection) {
-        // Cách cuộn chính xác hơn: tính khoảng cách từ đỉnh trang
-        const offsetTop = nextSection.offsetTop;
+        // Tính toán vị trí chính xác
+        const offsetTop = nextSection.getBoundingClientRect().top + window.pageYOffset;
+        
         window.scrollTo({
           top: offsetTop,
           behavior: "smooth"
         });
+      } else {
+        // Nếu chưa tìm thấy (do máy chậm), thử lại sau 100ms
+        console.log("Đang tìm section...");
       }
-    }, 2500); // Đảm bảo thời gian này khớp với transition của ảnh (2.5s)
+    }, 2600); 
+
     return () => clearTimeout(timer);
   }
 }, [isStarted]);
 
   const handleScrollDown = (e) => {
-  e.stopPropagation(); // Ngăn sự kiện click lan ra Cover
-  const nextSection = document.getElementById("couple-section");
-  if (nextSection) {
-    window.scrollTo({
-      top: nextSection.offsetTop,
-      behavior: "smooth"
-    });
-  }
-};
+    e.stopPropagation(); // Không kích hoạt ngược lại hàm setIsStarted của cha
+    const nextSection = document.getElementById("couple-section");
+    if (nextSection) {
+      window.scrollTo({
+        top: nextSection.offsetTop,
+        behavior: "smooth"
+      });
+    }
+  };
 
   return (
     <section 
-      className="relative h-screen flex items-center justify-center overflow-hidden cursor-pointer" 
-      onClick={() => setIsStarted(true)}
+      className={`relative h-screen flex items-center justify-center overflow-hidden transition-all duration-700 ${
+        isStarted ? "cursor-default" : "cursor-pointer"
+      }`} 
+      onClick={() => !isStarted && setIsStarted(true)}
     >
+      {/* Background Images */}
       <div className="absolute inset-0 z-0 bg-stone-900 flex items-center justify-center overflow-hidden">
-        <img src="2.jpg" className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-40" alt="Blur" />
         <img 
           src="2.jpg" 
-          className={`relative z-10 h-full w-auto object-contain transition-all duration-[2.5s] ${
+          className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-40" 
+          alt="Blur" 
+        />
+        <img 
+          src="2.jpg" 
+          className={`relative z-10 h-full w-auto object-contain transition-all duration-[2.5s] ease-in-out ${
             isStarted ? "scale-100 blur-[3px]" : "scale-105 blur-0"
           }`} 
           alt="Main" 
@@ -50,6 +65,7 @@ export const Cover = ({ isStarted, setIsStarted }) => {
         }`}></div>
       </div>
       
+      {/* Lớp phủ hướng dẫn khi chưa mở */}
       {!isStarted && (
         <div className="relative z-30 text-white/70 animate-pulse flex flex-col items-center">
           <Sparkles size={32} className="mb-2" />
@@ -57,7 +73,8 @@ export const Cover = ({ isStarted, setIsStarted }) => {
         </div>
       )}
 
-      <div className={`relative z-30 text-center text-white px-4 transition-all duration-[1.5s] ${
+      {/* Nội dung chính hiện ra sau khi click */}
+      <div className={`relative z-30 text-center text-white px-4 transition-all duration-[1.5s] delay-500 ${
         isStarted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
       }`}>
         <Heart className="mx-auto text-rose-400 mb-6 animate-pulse" fill="currentColor" size={40} />
@@ -67,8 +84,11 @@ export const Cover = ({ isStarted, setIsStarted }) => {
         </h1>
         <p className="text-3xl md:text-5xl tracking-[0.4em] font-light">09.06.2026</p>
         
-        {/* Nút ChevronDown */}
-        <div onClick={handleScrollDown} className="absolute bottom-[-80px] left-1/2 -translate-x-1/2 cursor-pointer opacity-70">
+        {/* Nút Cuộn xuống */}
+        <div 
+          onClick={handleScrollDown} 
+          className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
+        >
           <ChevronDown className="animate-bounce" size={40} />
         </div>
       </div>

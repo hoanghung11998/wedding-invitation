@@ -1,6 +1,5 @@
 import React from "react";
 import { VerticalImage } from "../UI/VerticalImage";
-import { RevealSection } from "../Wedding/RevealSection";
 
 const GALLERY_IMAGES = [
   "VHH_0171.jpg",
@@ -9,8 +8,6 @@ const GALLERY_IMAGES = [
   "VHH_1074.jpg",
   "VHH_1431.jpg",
   "VHH_0599.jpg",
-
-
 ];
 
 export const Gallery = () => {
@@ -39,39 +36,39 @@ export const Gallery = () => {
         <div className="w-12 h-[1px] bg-rose-300 mx-auto mt-4"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-2 md:px-4 space-y-2 md:space-y-8">
+      <div className="max-w-6xl mx-auto px-2 md:px-4 space-y-4 md:space-y-8">
         {imageRows.map((row, rowIndex) => (
-          <RevealSection key={rowIndex} threshold={0.1}>
-            <div 
-              className={`flex w-full gap-2 md:gap-8 justify-center ${
-                row.length === 2 ? "px-[10%] md:px-20" : ""
-              }`}
-            >
-              {row.map((src, i) => {
-                let side = "up"; 
-                if (i === 0) side = "left";
-                if (i === row.length - 1) side = "right";
-                
-                const delays = ["", "delay-200", "delay-400"];
+          <div 
+            key={rowIndex} 
+            className={`flex w-full gap-2 md:gap-8 justify-center ${
+              row.length === 2 ? "px-[5%] md:px-20" : ""
+            }`}
+          >
+            {row.map((src, i) => {
+              // Xác định hướng bay: trái sang, giữa trồi lên, phải sang
+              let side = "up"; 
+              if (i === 0) side = "left";
+              if (i === row.length - 1) side = "right";
+              
+              // Delay dạng số (ms) để Stagger mượt mà
+              // Mỗi ảnh trong hàng hiện cách nhau 200ms
+              const delayValue = i * 200;
 
-                return (
-                  <div 
-                    key={i} 
-                    className={`${row.length === 3 ? "w-1/3" : "w-1/2"} flex-shrink-0`}
-                  >
-                    <VerticalImage
-                      src={src}
-                      index={i + rowIndex * 3}
-                      side={side}
-                      delay={delays[i]}
-                      // Bạn nên truyền thêm class vào VerticalImage để nó fill đầy thẻ div này
-                      className="w-full h-full object-cover shadow-sm md:shadow-xl"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </RevealSection>
+              return (
+                <div 
+                  key={i} 
+                  className={`${row.length === 3 ? "w-1/3" : "w-1/2"} flex-shrink-0`}
+                >
+                  <VerticalImage
+                    src={src}
+                    index={i + rowIndex * 3}
+                    side={side}
+                    delay={delayValue}
+                  />
+                </div>
+              );
+            })}
+          </div>
         ))}
       </div>
     </section>
