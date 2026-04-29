@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+}
+
+:root {
+  font-family: var(--font-serif);
+}
+
+/* --- Các hiệu ứng dùng Transition (Dành cho Reveal on Scroll) --- */
+/* Mặc định khi chưa cuộn tới */
+.reveal-left, .reveal-right, .reveal-up {
+  opacity: 0;
+  transition: all 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.reveal-left { transform: translateX(-80px); }
+.reveal-right { transform: translateX(80px); }
+.reveal-up { transform: translateY(60px); }
+
+/* Khi đã cuộn tới (có class .active từ RevealSection) */
+.active .reveal-left,
+.active .reveal-right,
+.active .reveal-up {
+  opacity: 1;
+  transform: translate(0);
+}
+
+/* --- Các hiệu ứng dùng Keyframes (Dành cho các hiệu ứng lặp lại hoặc cố định) --- */
+@keyframes customSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Helper classes */
+.animate-custom-spin { animation: customSpin 12s linear infinite; }
+.animate-pulse-soft { animation: pulseSoft 4s ease-in-out infinite; }
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+/* Tùy chỉnh độ trễ cho chữ xuất hiện sau hình một chút */
+.delay-500 { transition-delay: 500ms !important; }
+.delay-700 { transition-delay: 700ms !important; }
+.delay-1000 { transition-delay: 1000ms !important; }
+
+/* Organic Frame cho khung hình */
+.organic-frame {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+/* Thêm vào styleTag hiện tại của bạn */
+.map-container {
+  filter: grayscale(10%) contrast(90%);
+  transition: filter 0.5s ease;
+}
+.map-container:hover {
+  filter: grayscale(0%) contrast(100%);
+}
+.calendar-box {
+  border: 1px solid #f3f4f6;
+  background: linear-gradient(to bottom, #fff 0%, #fffbfb 100%);
+}
