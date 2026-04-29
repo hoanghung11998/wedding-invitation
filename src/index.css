@@ -1,74 +1,130 @@
 @import "tailwindcss";
 
+/* --- 1. THEME CONFIGURATION --- */
 @theme {
   --font-serif: "Playfair Display", serif;
+  
+  /* Đưa các animation vào theme để dùng được class animate-* của Tailwind */
+  --animate-custom-spin: customSpin 12s linear infinite;
+  --animate-pulse-soft: pulseSoft 4s ease-in-out infinite;
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-vinyl: vinyl-spin 4s linear infinite;
+
+  @keyframes customSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  @keyframes vinyl-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes heart-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
 }
 
+/* --- 2. BASE STYLES --- */
 :root {
   font-family: var(--font-serif);
+  scroll-behavior: smooth;
 }
 
-/* --- Các hiệu ứng dùng Transition (Dành cho Reveal on Scroll) --- */
-/* Mặc định khi chưa cuộn tới */
-.reveal-left, .reveal-right, .reveal-up {
+/* --- 3. REVEAL SYSTEM (Scroll Animations) --- */
+[class*="reveal-"] {
   opacity: 0;
-  transition: all 2.5s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
+  transition: all 2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.reveal-left { transform: translateX(-80px); }
+.reveal-left  { transform: translateX(-80px); }
 .reveal-right { transform: translateX(80px); }
-.reveal-up { transform: translateY(60px); }
+.reveal-up    { transform: translateY(60px); }
 
-/* Khi đã cuộn tới (có class .active từ RevealSection) */
-.active .reveal-left,
-.active .reveal-right,
-.active .reveal-up {
-  opacity: 1;
-  transform: translate(0);
+/* Kích hoạt khi có class .active (từ Intersection Observer) */
+.active [class*="reveal-"],
+.active.reveal-up {
+  opacity: 1 !important;
+  transform: translate(0, 0) !important;
 }
 
-/* --- Các hiệu ứng dùng Keyframes (Dành cho các hiệu ứng lặp lại hoặc cố định) --- */
-@keyframes customSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes pulseSoft {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
-}
-
-/* Helper classes */
-.animate-custom-spin { animation: customSpin 12s linear infinite; }
-.animate-pulse-soft { animation: pulseSoft 4s ease-in-out infinite; }
-.animate-float { animation: float 5s ease-in-out infinite; }
-
-/* Tùy chỉnh độ trễ cho chữ xuất hiện sau hình một chút */
-.delay-500 { transition-delay: 500ms !important; }
-.delay-700 { transition-delay: 700ms !important; }
-.delay-1000 { transition-delay: 1000ms !important; }
-
-/* Organic Frame cho khung hình */
+/* --- 4. COMPONENTS & SPECIAL EFFECTS --- */
 .organic-frame {
   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
 }
 
-/* Thêm vào styleTag hiện tại của bạn */
+.heart-burst {
+  @apply absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 opacity-0 scale-0;
+  transition: all 1.5s cubic-bezier(0.17, 0.89, 0.32, 1.49) 2s;
+}
+.active .heart-burst {
+  @apply opacity-100 scale-100;
+}
+
+/* Particles System */
+.confetti-particle-pro {
+  @apply absolute pointer-events-none opacity-0;
+}
+.active .confetti-particle-pro {
+  animation: heartExplode 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes heartExplode {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  50% { transform: translate(var(--tw-x), var(--tw-y)) scale(1.2) rotate(var(--tw-r)); }
+  100% { transform: translate(var(--tw-x), calc(var(--tw-y) + 100px)) scale(0.8) rotate(calc(var(--tw-r) + 45deg)); opacity: 0; }
+}
+
+/* Calendar */
+.calendar-wrap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+.calendar-day {
+  @apply aspect-square flex items-center justify-center relative text-sm text-stone-600;
+}
+.highlight-date {
+  @apply text-white font-bold z-10;
+}
+.highlight-date::before {
+  content: '';
+  @apply absolute w-[35px] h-[35px] bg-rose-400 rounded-full -z-10 animate-[heart-pulse_2s_infinite];
+}
+
+/* --- 5. UTILITIES --- */
+.pause-animation { animation-play-state: paused; }
+.glow-heart { filter: drop-shadow(0 0 15px rgba(251, 113, 133, 0.6)); }
+
+/* Map hover effect */
 .map-container {
   filter: grayscale(10%) contrast(90%);
-  transition: filter 0.5s ease;
+  @apply transition-all duration-500;
 }
 .map-container:hover {
   filter: grayscale(0%) contrast(100%);
 }
-.calendar-box {
-  border: 1px solid #f3f4f6;
-  background: linear-gradient(to bottom, #fff 0%, #fffbfb 100%);
+
+/* Delay helpers */
+.delay-500  { transition-delay: 500ms !important; }
+.delay-700  { transition-delay: 700ms !important; }
+.delay-1000 { transition-delay: 1000ms !important; }
+
+@keyframes progress-bar {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+.animate-progress-bar {
+  animation: progress-bar 3s linear forwards;
 }
