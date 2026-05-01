@@ -10,12 +10,16 @@ export const FamilyInfo = () => {
   });
 
   return (
-    <div ref={ref} className="w-full max-w-5xl mx-auto mb-12 md:mb-20 px-2 overflow-hidden">
+    <div
+      ref={ref}
+      className="w-full max-w-5xl mx-auto mb-12 md:mb-20 px-2 overflow-hidden"
+    >
       <div className="grid grid-cols-2 gap-4 md:gap-32 items-start relative py-4">
-        
         {/* 1. Nhà Trai - Bay từ trái sang */}
-        <div className={`flex flex-col space-y-4 text-center transition-all duration-[1200ms] ease-out delay-300
-          ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}>
+        <div
+          className={`flex flex-col space-y-4 text-center transition-all duration-[1200ms] ease-out delay-300
+          ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
+        >
           <div className="space-y-1">
             <h6 className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.5em] text-rose-400 font-bold">
               Nhà trai
@@ -38,18 +42,21 @@ export const FamilyInfo = () => {
             </p>
           </div>
           <div className="text-[10px] md:text-sm text-stone-400 font-light italic tracking-wide mt-1">
-            Phú Xuân, Đăk Lăk
+            Thôn 5, Phú Xuân, Đăk Lăk
           </div>
         </div>
 
         {/* 2. Đường kẻ dọc phân cách - Hiệu ứng mọc từ dưới lên */}
-        <div className={`absolute left-1/2 top-0 bottom-0 w-[1px] bg-stone-100 -translate-x-1/2 transition-all duration-[1500ms] ease-in-out delay-700 origin-bottom
-          ${inView ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"}`}>
-        </div>
+        <div
+          className={`absolute left-1/2 top-0 bottom-0 w-[1px] bg-stone-100 -translate-x-1/2 transition-all duration-[1500ms] ease-in-out delay-700 origin-bottom
+          ${inView ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"}`}
+        ></div>
 
         {/* 3. Nhà Gái - Bay từ phải sang */}
-        <div className={`flex flex-col space-y-4 text-center transition-all duration-[1200ms] ease-out delay-1000
-          ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}>
+        <div
+          className={`flex flex-col space-y-4 text-center transition-all duration-[1200ms] ease-out delay-1000
+          ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
+        >
           <div className="space-y-1">
             <h6 className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.5em] text-rose-400 font-bold">
               Nhà gái
@@ -72,7 +79,7 @@ export const FamilyInfo = () => {
             </p>
           </div>
           <div className="text-[10px] md:text-sm text-stone-400 font-light italic tracking-wide mt-1">
-            Nam Sầm Sơn, Thanh Hóa
+            Số 14, Đhqx05, Thôn Việt Trung, Nam Sầm Sơn, Thanh Hóa
           </div>
         </div>
       </div>
@@ -81,47 +88,45 @@ export const FamilyInfo = () => {
 };
 
 const HeartConfetti = () => {
-  const colors = [
-    "text-rose-400",
-    "text-pink-300",
-    "text-rose-500",
-    "text-orange-200",
-  ];
+  const colors = ["text-rose-400", "text-pink-300", "text-rose-500", "text-orange-200"];
 
   return (
     <div className="absolute top-[65%] md:top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none flex items-center justify-center">
+      {/* Trái tim chính ở giữa */}
       <div className="relative">
         <Heart
           size={50}
           className="md:w-[80px] md:h-[80px] text-rose-400/90 fill-rose-400/30 animate-pulse glow-heart"
           strokeWidth={1.5}
         />
+        
+        {/* Container cho các hạt tim bùng nổ - xuất phát từ tâm */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          {[...Array(25)].map((_, i) => {
+            const size = Math.random() * 15 + 10;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            // Thời gian delay ngẫu nhiên để các hạt không bay ra cùng lúc
+            const delay = (Math.random() * 2 + 0.5).toFixed(2); 
+
+            return (
+              <Heart
+                key={i}
+                size={size}
+                className={`confetti-particle-pro absolute opacity-0 fill-current ${color}`}
+                style={{
+                  "--tw-x": `${(Math.random() - 0.5) * 400}px`, // Bay rộng hơn
+                  "--tw-y": `${(Math.random() - 0.7) * 400}px`,
+                  "--tw-r": `${Math.random() * 720}deg`,
+                  "--delay": `${delay}s`,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
-
-      {/* Các hạt tim bùng nổ */}
-      {[...Array(25)].map((_, i) => {
-        const size = Math.random() * 15 + 8;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const delay = (Math.random() * 0.8 + 2.2).toFixed(2);
-
-        return (
-          <Heart
-            key={i}
-            size={size}
-            className={`confetti-particle-pro absolute opacity-0 fill-current ${color}`}
-            style={{
-              "--tw-x": `${(Math.random() - 0.5) * 350}px`,
-              "--tw-y": `${(Math.random() - 0.7) * 350}px`,
-              "--tw-r": `${Math.random() * 1000}deg`,
-              "--delay": `${delay}s`,
-            }}
-          />
-        );
-      })}
     </div>
   );
 };
-
 
 export const Couple = () => {
   // Hook để theo dõi toàn bộ section
@@ -137,21 +142,23 @@ export const Couple = () => {
       className="py-20 md:py-40 px-4 bg-white overflow-hidden"
     >
       <div className="max-w-6xl mx-auto">
-        
         {/* 1. Thông tin phụ huynh */}
-        <div className={`transition-all duration-1000 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div
+          className={`transition-all duration-1000 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        >
           <FamilyInfo />
         </div>
 
         {/* Container chứa cặp đôi */}
         <div className="relative flex flex-row items-start justify-center pt-24 md:pt-32 pb-10 gap-4 md:gap-12">
-          
           {/* Điểm nhấn bùng nổ */}
           {inView && <HeartConfetti />}
 
           {/* 2. TIÊU ĐỀ BÁO TIN */}
-          <div className={`absolute top-0 left-0 right-0 text-center flex flex-col items-center space-y-2 transition-all duration-1000 delay-300
-            ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+          <div
+            className={`absolute top-0 left-0 right-0 text-center flex flex-col items-center space-y-2 transition-all duration-1000 delay-300
+            ${inView ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}
+          >
             <div className="text-[10px] md:text-[12px] uppercase tracking-[0.5em] md:tracking-[0.8em] text-rose-400 font-bold">
               Trân trọng báo tin
             </div>
@@ -161,14 +168,15 @@ export const Couple = () => {
           </div>
 
           {/* CỘT CHÚ RỂ - Bay từ trái sang */}
-          <div className={`flex flex-col items-center z-10 w-1/2 md:w-80 transition-all duration-[1500ms] ease-out delay-500
-            ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'}`}>
-            
+          <div
+            className={`flex flex-col items-center z-10 w-1/2 md:w-80 transition-all duration-[1500ms] ease-out delay-500
+            ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"}`}
+          >
             <div className="mb-6 md:mb-10 text-center min-h-[80px] flex flex-col justify-end">
               <h3 className="text-stone-400 text-[9px] md:text-[11px] tracking-[0.3em] uppercase mb-1">
                 Chú rể
               </h3>
-              <h4 className="text-4xl md:text-7xl text-rose-800 font-script leading-none">
+              <h4 className="text-5xl md:text-8xl text-rose-800 font-wedding leading-[1.1] px-4">
                 Hoàng Hưng
               </h4>
             </div>
@@ -183,14 +191,15 @@ export const Couple = () => {
           </div>
 
           {/* CỘT CÔ DÂU - Bay từ phải sang */}
-          <div className={`flex flex-col items-center z-10 w-1/2 md:w-80 transition-all duration-[1500ms] ease-out delay-700
-            ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`}>
-            
+          <div
+            className={`flex flex-col items-center z-10 w-1/2 md:w-80 transition-all duration-[1500ms] ease-out delay-700
+            ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"}`}
+          >
             <div className="mb-6 md:mb-10 text-center min-h-[80px] flex flex-col justify-end">
               <h3 className="text-stone-400 text-[9px] md:text-[11px] tracking-[0.3em] uppercase mb-1">
                 Cô dâu
               </h3>
-              <h4 className="text-4xl md:text-7xl text-rose-800 font-script leading-none">
+              <h4 className="text-5xl md:text-8xl text-rose-800 font-wedding leading-[1.1] px-4">
                 Hà Phương
               </h4>
             </div>
@@ -203,7 +212,6 @@ export const Couple = () => {
               />
             </div>
           </div>
-
         </div>
       </div>
     </div>

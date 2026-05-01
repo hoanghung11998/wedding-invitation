@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Monsieur+La+Doulaise&display=swap');
+
 @import "tailwindcss";
 
 /* --- 1. THEME CONFIGURATION --- */
@@ -167,8 +169,38 @@
   cursor: default;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Dancing+Script:wght@400;700&display=swap');
+.font-wedding {
+  font-family: 'Pinyon Script', cursive; /* Hoặc font bạn đã chọn */
+  display: inline-block; /* Giúp padding và transform hoạt động chuẩn hơn */
+  padding: 0 10px;       /* Tránh việc nét chữ bị cắt ở hai đầu */
+  overflow: visible;     /* Đảm bảo các nét uốn lượn không bị mất */
+}
 
-.font-script {
-  font-family: 'Pinyon Script', cursive;
+/* Hiệu ứng hào quang cho trái tim chính */
+.glow-heart {
+  filter: drop-shadow(0 0 15px rgba(251, 113, 133, 0.6));
+}
+
+.confetti-particle-pro {
+  /* Tăng thời gian mặc định lên 5s và dùng ease-out để chậm dần về cuối */
+  animation: explode var(--duration, 5s) ease-out var(--delay, 0s) forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.2); /* Phóng to nhẹ lúc đầu */
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    /* Bay đến vị trí ngẫu nhiên và xoay */
+    transform: translate(var(--tw-x), var(--tw-y)) scale(0.5) rotate(var(--tw-r));
+    opacity: 0;
+  }
 }

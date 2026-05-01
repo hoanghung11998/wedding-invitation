@@ -25,7 +25,7 @@ export const MusicPlayer = ({ isStarted }) => {
 
   return (
     <>
-      <audio ref={audioRef} loop src="./Beautiful In White.mp3" />
+      <audio ref={audioRef} loop src="./Perfect.mp3" />
       
       <button
         onClick={toggleMusic}
